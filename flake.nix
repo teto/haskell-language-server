@@ -175,6 +175,14 @@
           with pkgs;
           hpkgs.shellFor {
             doBenchmark = true;
+            # doCheck = true;
+            # doBenchmark = true;
+            genericBuilderArgsModifier = args: args // {
+              dontStrip = true;
+              configureFlags = (args.configureFlags or [] ) ++ "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+              # enableDWARFDebugging = true;
+            };
+
             packages = p:
               with builtins;
               map (name: p.${name}) (attrNames pkgs.hlsSources);
@@ -199,7 +207,7 @@
         # Copied from https://github.com/NixOS/nixpkgs/blob/210784b7c8f3d926b7db73bdad085f4dc5d79418/pkgs/development/tools/haskell/haskell-language-server/withWrapper.nix#L16
         mkExe = hpkgs:
           with pkgs.haskell.lib;
-          justStaticExecutables (overrideCabal hpkgs.haskell-language-server
+          justStaticExecutables (enableDWARFDebugging (overrideCabal hpkgs.haskell-language-server
             (_: {
               postInstall = ''
                 remove-references-to -t ${hpkgs.ghc} $out/bin/haskell-language-server
@@ -208,7 +216,7 @@
                 remove-references-to -t ${hpkgs.js-dgtable.data} $out/bin/haskell-language-server
                 remove-references-to -t ${hpkgs.js-flot.data} $out/bin/haskell-language-server
               '';
-            }));
+            })));
       in with pkgs; rec {
 
         packages = {
