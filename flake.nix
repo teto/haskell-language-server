@@ -240,11 +240,17 @@
           haskell-language-server-8107-dev = mkDevShell ghc8107;
           haskell-language-server-901-dev = mkDevShell ghc901;
 
+
           # hls package
           haskell-language-server = mkExe ghcDefault;
           haskell-language-server-884 = mkExe ghc884;
           haskell-language-server-8107 = mkExe ghc8107;
           haskell-language-server-901 = mkExe ghc901;
+
+          # hie-bios packages
+          hie-bios-884 = ghc884.hie-bios;
+          hie-bios-8107 = ghc8107.hie-bios;
+          hie-bios-901 = ghc901.hie-bios;
 
           # docs
           docs = docs;
